@@ -1,8 +1,8 @@
 node {
     def dockerImage = 'node:16-buster-slim'
-    triggers {
-        pollSCM('*/2 * * * *') 
-    }
+    // triggers {
+    //     pollSCM('*/2 * * * *') 
+    // }
     stage('Build') {
         echo 'Building the project...'
         try {
@@ -25,5 +25,4 @@ node {
             error "Tests failed: ${e.message}"
         }
     }
-   
 }
