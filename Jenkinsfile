@@ -1,13 +1,19 @@
 node {
-    def dockerContainer = docker.image('node:16-buster-slim').inside('-p 3000:3000') {
-        triggers {
-            pollSCM('*/2 * * * *')
-        }
-        stage('Build') {
-            sh 'npm install'
-        }
-        stage('Test') {
-            sh './jenkins/scripts/test.sh'
+    docker.image('node:16-buster-slim').withRun('-p 3000:3000') {
+        try {
+            // Stage: Build
+            stage('Build') {
+                steps {
+                    sh 'npm install'
+                }
+            }
+
+            // Stage: Test
+            stage('Test') {
+                steps {
+                    sh './jenkins/scripts/test.sh'
+                }
+            }
         }
     }
 }
@@ -18,10 +24,18 @@ node {
 //             args '-p 3000:3000' 
 //         }
 //     }
+//     triggers {
+//         pollSCM('*/2 * * * *')
+//     }
 //     stages {
 //         stage('Build') { 
 //             steps {
 //                 sh 'npm install'
+//             }
+//         }
+//         stage('Test') { 
+//             steps {
+//                 sh './jenkins/scripts/test.sh'
 //             }
 //         }
 //     }
