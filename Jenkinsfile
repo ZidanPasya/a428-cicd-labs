@@ -5,9 +5,9 @@ pipeline {
             args '-p 3000:3000' 
         }
     }
-    triggers {
-        pollSCM('*/2 * * * *')
-    }
+    // triggers {
+    //     pollSCM('*/2 * * * *')
+    // }
     stages {
         stage('Build') { 
             steps {
@@ -17,6 +17,14 @@ pipeline {
         stage('Test') { 
             steps {
                 sh './jenkins/scripts/test.sh'
+                input message: 'Lanjutkan ke tahap Deploy?'
+            }
+        }
+        stage('Deploy') { 
+            steps {
+                sh './jenkins/scripts/deploy.sh'
+                sleep(secs: 1, unit: 'MINUTES')
+                sh './jenkins/scripts/kill.sh'
             }
         }
     }
